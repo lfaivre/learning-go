@@ -2,61 +2,68 @@ package main
 
 import (
 	"fmt"
-	"reflect"
+	"math"
 )
 
-// utilizes compositional relationships, "has a" vs inheritance "is a"
-type Animal struct {
-	Height int
-	Width  int
-	Weight float32
-}
-
-// utilizing compositional embeedding
-type Dog struct {
-	Animal
-	Name   string `required max:"100"`
-	Age    int
-	Breed  string
-	Family []string
+func returnTrue() bool {
+	fmt.Println("Returning true!")
+	return true
 }
 
 func main() {
-	aDog := Dog{
-		Name:  "Barker",
-		Age:   1,
-		Breed: "Golden Retriever",
-		Family: []string{
-			"Buster",
-			"Frodo",
-		},
+	// basic if conditional statement
+	if true {
+		fmt.Println("The test is true!")
 	}
-	fmt.Println(aDog)
-	fmt.Println(aDog.Name)
-	fmt.Println(aDog.Family[1])
 
-	// utilizing composition
-	aDog.Height = 32
-	aDog.Width = 64
-	aDog.Weight = 100
-	fmt.Println(aDog)
+	// conditional statement using initializer
+	statePopulations := map[string]int{
+		"California":   39250017,
+		"Texas":        39250017,
+		"Florida":      20612439,
+		"New York":     39250017,
+		"Pennsylvania": 39250017,
+		"Illinois":     39250017,
+		"Ohio":         39250017,
+	}
 
-	// anonymous struct
-	aCat := struct{ name string }{name: "Whiskers"}
-	fmt.Println(aCat)
-	fmt.Println(aCat.name)
+	if pop, ok := statePopulations["Florida"]; ok {
+		fmt.Println(pop)
+	}
 
-	// structs use values, not references
-	anotherCat := aCat
-	anotherCat.name = "Socks"
-	fmt.Println(aCat.name)
-	fmt.Println(anotherCat.name)
+	// utilizing comparison operators
+	number := 50
+	guess := 20
 
-	// working with tags
-	t := reflect.TypeOf(Dog{})
-	field, _ := t.FieldByName("Name")
-	fmt.Println(field.Tag)
+	if guess < number {
+		fmt.Println("Too low!")
+	}
 
-	// tags are meaningless by themselves (just strings)
-	// needs a validation framework to handle tag values
+	// utilizing logical operators
+	if guess < 1 || guess > 100 {
+		fmt.Println("The guess must be between 1 and 100!")
+	} else {
+		fmt.Println("Executing second block!")
+	}
+
+	// utilizing short-circuiting, lazily evaluation as needed
+	if guess < 1 || returnTrue() || guess > 100 {
+		fmt.Println("The guess must be between 1 and 100!")
+	}
+
+	// floating point numbers are an appoximation of decimal values
+	myNum := 0.123
+
+	if myNum == math.Pow(math.Sqrt(myNum), 2) {
+		fmt.Println("These are the same!")
+	} else {
+		fmt.Println("These are different!")
+	}
+
+	// fine tune approximation value (0.001 in this case) in order to compare floating point nums
+	if math.Abs(myNum/math.Pow(math.Sqrt(myNum), 2)-1) < 0.001 {
+		fmt.Println("These are the same!")
+	} else {
+		fmt.Println("These are different!")
+	}
 }
