@@ -5,36 +5,51 @@ import (
 )
 
 func main() {
-	grades := [3]int{97, 85, 93}
-	grades2 := [...]int{97, 85, 93}
-	fmt.Printf("Grades: %v\n", grades)
-	fmt.Printf("Grades: %v\n", grades2)
+	// slice
+	a := []int{1, 2, 3}
+	fmt.Printf("Length: %v\n", len(a))
+	fmt.Printf("Capacity: %v\n", cap(a))
 
-	var students [3]string
-	fmt.Printf("Students: %v\n", students)
-	students[0] = "Student 1"
-	students[1] = "Student 2"
-	students[2] = "Student 3"
-	fmt.Printf("Students: %v\n", students)
-	fmt.Printf("Students Length: %v\n", len(students))
-
-	var identityMatrix [3][3]int
-	identityMatrix[0] = [3]int{1, 0, 0}
-	identityMatrix[1] = [3]int{0, 1, 0}
-	identityMatrix[2] = [3]int{0, 0, 1}
-	fmt.Println(identityMatrix)
-
-	// arrays are passed by value, not reference
-	a := [...]int{1, 2, 3}
+	// slices are reference types
 	b := a
 	b[1] = 5
+
 	fmt.Println(a)
 	fmt.Println(b)
 
-	// unless...
-	c := [...]int{1, 2, 3}
-	d := &c // address of c
-	d[1] = 5
+	c := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	d := c[:]   // slice of all elements
+	e := c[3:]  // slice from 4th element to end (first number is inclusive)
+	f := c[:6]  // slice first 6 elements (second number is exclusive)
+	g := c[3:6] // slice from 4th, 5th, and 6th elements
 	fmt.Println(c)
 	fmt.Println(d)
+	fmt.Println(e)
+	fmt.Println(f)
+	fmt.Println(g)
+
+	h := make([]int, 3, 100)
+	fmt.Println(h)
+	fmt.Printf("Length: %v\n", len(h))
+	fmt.Printf("Capacity: %v\n", cap(h))
+
+	h = append(h, 1, 2, 3, 4, 5)
+	fmt.Println(h)
+	fmt.Printf("Length: %v\n", len(h))
+	fmt.Printf("Capacity: %v\n", cap(h))
+
+	h = append(h, []int{6, 7, 8}...) // similar to javascript's spread operator
+	fmt.Println(h)
+
+	// treating slices like stacks
+	i := []int{1, 2, 3, 4, 5}
+	j := i[:len(i)-1] // remove last element
+	fmt.Println(i)
+	fmt.Println(j)
+
+	k := append(i[:2], i[3:]...) // remove middle element
+	fmt.Println(k)
+
+	// warning: k has now modified i
+	fmt.Println(i)
 }
