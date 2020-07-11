@@ -2,48 +2,47 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
-	"net/http"
 )
 
 func main() {
-	// defer: executes function call after final statement of parent function, but before return
-	// last in, first out (lifo)
-	fmt.Println("start")
-	defer fmt.Println("middle")
-	fmt.Println("end")
+	var a int = 42
+	// b is a pointer to an integer, it is assigned the address value of a (which is an integer)
+	var b *int = &a
+	fmt.Println(a, *b)
+	fmt.Printf("%v, %T\n", b, b)
 
-	// a more realistic example
-	res, err := http.Get("https://www.google.com/robots.txt")
-	if err != nil {
-		log.Fatal(err)
+	// dereferencing pointer to get integer value
+	fmt.Printf("%v, %T\n", *b, *b)
+
+	// use dereferenced value to change original
+	*b = 36
+	fmt.Println(a, *b)
+
+	// pointer arithmetic is not native to go to keep the language simple
+	// "unsafe" package allows for operations like pointer arithmetic
+
+	type myStruct struct {
+		foo int
 	}
-	defer res.Body.Close()
-	robots, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s", robots)
 
-	// defer takes value of function arguments when it was called (eager evaluation)
+	var ms *myStruct
+	ms = &myStruct{foo: 42}
+	fmt.Println(ms)
 
-	// panic: similar to throwing an error in javascript, user-defined error
-	// panic happens after deferred statements: function statements -> deferred statements -> panic -> return
-	fmt.Println("start")
-	panicker()
-	fmt.Println("end")
-}
+	// no initialization with `new` keyword
+	var ms2 *myStruct
+	ms2 = new(myStruct)
+	fmt.Println(ms2)
 
-func panicker() {
-	fmt.Println("about to panic")
-	defer func() {
-		// handle panic
-		if err := recover(); err != nil {
-			log.Println("Error: ", err)
-			// panic(err) // re-throw panic if unable to handle
-		}
-	}()
-	panic("something bad happened")
-	fmt.Println("done panicking")
+	// `*` has lower precendence than `.` so parentheses are necessary
+	(*ms2).foo = 42
+	fmt.Println((*ms2).foo)
+
+	// go compiler will implicity use value of struct, not pointer (shorthand)
+	fmt.Println(ms2.foo)
+
+	// zero value for a pointer is `nil`
+
+	// all assignment operations in go are copy operations
+	// slices and maps both pass values by reference
 }
