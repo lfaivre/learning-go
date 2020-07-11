@@ -2,68 +2,60 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
-func returnTrue() bool {
-	fmt.Println("Returning true!")
-	return true
-}
-
 func main() {
-	// basic if conditional statement
-	if true {
-		fmt.Println("The test is true!")
+	// basic switch statement
+	// "2" is referred to as a "tag"
+	// "break" keyword is implied
+	// can still use "break" however if needed
+	switch 5 {
+	case 1, 3, 5, 7, 9:
+		fmt.Println("Odd")
+	case 2, 4, 6, 8, 10:
+		fmt.Println("Even")
+		break
+		fmt.Println("Will not run")
+	default:
+		fmt.Println("Default")
 	}
 
-	// conditional statement using initializer
-	statePopulations := map[string]int{
-		"California":   39250017,
-		"Texas":        39250017,
-		"Florida":      20612439,
-		"New York":     39250017,
-		"Pennsylvania": 39250017,
-		"Illinois":     39250017,
-		"Ohio":         39250017,
+	// switch statement with initializer
+	switch i := 2 + 3; i {
+	case 1, 3, 5, 7, 9:
+		fmt.Println("Odd")
+	case 2, 4, 6, 8, 10:
+		fmt.Println("Even")
+	default:
+		fmt.Println("Default")
 	}
 
-	if pop, ok := statePopulations["Florida"]; ok {
-		fmt.Println(pop)
+	// tagless syntax
+	// overlapping is allowed, first to equal true will evaluate
+	// use "fallthrough" to fall through to next case
+	j := 10
+	switch {
+	case j <= 10:
+		fmt.Println("First")
+	case j <= 20:
+		fmt.Println("Second")
+		fallthrough
+	case j >= 0:
+		fmt.Println("Greater than or equal to 0")
+	default:
+		fmt.Println("Default")
 	}
 
-	// utilizing comparison operators
-	number := 50
-	guess := 20
-
-	if guess < number {
-		fmt.Println("Too low!")
-	}
-
-	// utilizing logical operators
-	if guess < 1 || guess > 100 {
-		fmt.Println("The guess must be between 1 and 100!")
-	} else {
-		fmt.Println("Executing second block!")
-	}
-
-	// utilizing short-circuiting, lazily evaluation as needed
-	if guess < 1 || returnTrue() || guess > 100 {
-		fmt.Println("The guess must be between 1 and 100!")
-	}
-
-	// floating point numbers are an appoximation of decimal values
-	myNum := 0.123
-
-	if myNum == math.Pow(math.Sqrt(myNum), 2) {
-		fmt.Println("These are the same!")
-	} else {
-		fmt.Println("These are different!")
-	}
-
-	// fine tune approximation value (0.001 in this case) in order to compare floating point nums
-	if math.Abs(myNum/math.Pow(math.Sqrt(myNum), 2)-1) < 0.001 {
-		fmt.Println("These are the same!")
-	} else {
-		fmt.Println("These are different!")
+	// type switch
+	var k interface{} = 1.0
+	switch k.(type) {
+	case int:
+		fmt.Println("i is an int")
+	case float64:
+		fmt.Println("i is a float64")
+	case string:
+		fmt.Println("i is a string")
+	default:
+		fmt.Println("i is another type")
 	}
 }
