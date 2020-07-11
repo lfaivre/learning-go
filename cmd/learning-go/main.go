@@ -4,46 +4,37 @@ import (
 	"fmt"
 )
 
-// constants are immutable, but can be shadowed
-
-// constants must be calculable at compile-time
-// - can't assign a function that returns a value to a constant
-
-// typed constants work like immutable variables
-// can utilize implicit conversions for untyped constants (with similar types)
-
-// enumerated constant
-const a = iota // starts at 0, increments by one
-
-const (
-	_ = iota // ignore first value by using blank identifier
-	catSpecialist
-	dogSpecialist
-	snakeSpecialist
-)
-
 func main() {
-	// defining a constant
-	const myConst int = 42
-	fmt.Printf("%v, %T\n", myConst, myConst)
+	grades := [3]int{97, 85, 93}
+	grades2 := [...]int{97, 85, 93}
+	fmt.Printf("Grades: %v\n", grades)
+	fmt.Printf("Grades: %v\n", grades2)
 
-	// enumerated constant example
-	var specialistType int = dogSpecialist
-	fmt.Printf("%v\n", specialistType == dogSpecialist)
-	fmt.Printf("%v\n", specialistType == catSpecialist)
+	var students [3]string
+	fmt.Printf("Students: %v\n", students)
+	students[0] = "Student 1"
+	students[1] = "Student 2"
+	students[2] = "Student 3"
+	fmt.Printf("Students: %v\n", students)
+	fmt.Printf("Students Length: %v\n", len(students))
 
-	const (
-		_  = iota
-		KB = 1 << (10 * iota)
-		MB
-		GB
-		TB
-		PB
-		EB
-		ZB
-		YB
-	)
+	var identityMatrix [3][3]int
+	identityMatrix[0] = [3]int{1, 0, 0}
+	identityMatrix[1] = [3]int{0, 1, 0}
+	identityMatrix[2] = [3]int{0, 0, 1}
+	fmt.Println(identityMatrix)
 
-	fileSize := 4000000000.
-	fmt.Printf("%.2fGB", fileSize/GB)
+	// arrays are passed by value, not reference
+	a := [...]int{1, 2, 3}
+	b := a
+	b[1] = 5
+	fmt.Println(a)
+	fmt.Println(b)
+
+	// unless...
+	c := [...]int{1, 2, 3}
+	d := &c // address of c
+	d[1] = 5
+	fmt.Println(c)
+	fmt.Println(d)
 }
