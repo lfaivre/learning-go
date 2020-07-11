@@ -2,44 +2,48 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
 )
 
 func main() {
-	// basic for-loop
-	for i := 0; i < 5; i++ {
-		// fmt.Println(i)
-	}
+	// defer: executes function call after final statement of parent function, but before return
+	// last in, first out (lifo)
+	fmt.Println("start")
+	defer fmt.Println("middle")
+	fmt.Println("end")
 
-	// while loop (modified for-loop)
-	for i := 0; i < 5; {
-		// fmt.Println(i)
-		i++
+	// a more realistic example
+	res, err := http.Get("https://www.google.com/robots.txt")
+	if err != nil {
+		log.Fatal(err)
 	}
+	defer res.Body.Close()
+	robots, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s", robots)
 
-	// while loop (modified for-loop)
-	j := 0
-	for {
-		if j == 4 {
-			break
+	// defer takes value of function arguments when it was called (eager evaluation)
+
+	// panic: similar to throwing an error in javascript, user-defined error
+	// panic happens after deferred statements: function statements -> deferred statements -> panic -> return
+	fmt.Println("start")
+	panicker()
+	fmt.Println("end")
+}
+
+func panicker() {
+	fmt.Println("about to panic")
+	defer func() {
+		// handle panic
+		if err := recover(); err != nil {
+			log.Println("Error: ", err)
+			// panic(err) // re-throw panic if unable to handle
 		}
-		j++
-		fmt.Println(j)
-	}
-
-	// use labels to break out of multiple loops
-Loop:
-	for k := 1; k <= 3; k++ {
-		for l := 1; l <= 3; l++ {
-			fmt.Println(k * l)
-			if k*l >= 3 {
-				break Loop
-			}
-		}
-	}
-
-	// for-range loop
-	s := []int{1, 2, 3}
-	for key, value := range s {
-		fmt.Println(key, value)
-	}
+	}()
+	panic("something bad happened")
+	fmt.Println("done panicking")
 }
