@@ -4,45 +4,51 @@ import (
 	"fmt"
 )
 
+/*
+
+Overview
+
+- Basic Syntax
+- Parameters
+- Return Values
+- Anonymous Functions
+- Functions as Types (functions are first-class citizens)
+- Methods
+
+*/
+
 func main() {
-	var a int = 42
-	// b is a pointer to an integer, it is assigned the address value of a (which is an integer)
-	var b *int = &a
-	fmt.Println(a, *b)
-	fmt.Printf("%v, %T\n", b, b)
+	sayMessage("hello world!")
 
-	// dereferencing pointer to get integer value
-	fmt.Printf("%v, %T\n", *b, *b)
+	// working with pointers
+	greeting := "Hello"
+	name := "Charlie"
+	sayGreeting(&greeting, &name)
+	fmt.Println(name)
 
-	// use dereferenced value to change original
-	*b = 36
-	fmt.Println(a, *b)
+	// working with variatic parameters
+	s := sum(1, 2, 3, 4, 5)
+	fmt.Println("The sum is", *s)
+}
 
-	// pointer arithmetic is not native to go to keep the language simple
-	// "unsafe" package allows for operations like pointer arithmetic
+func sayMessage(msg string) {
+	fmt.Println(msg)
+}
 
-	type myStruct struct {
-		foo int
+func sayGreeting(greeting, name *string) {
+	fmt.Println(*greeting, *name)
+	*name = "Snoopy"
+	fmt.Println(*name)
+}
+
+func sum(values ...int) *int {
+	// values is a slice
+	fmt.Println(values)
+	result := 0
+	for _, v := range values {
+		result += v
 	}
 
-	var ms *myStruct
-	ms = &myStruct{foo: 42}
-	fmt.Println(ms)
-
-	// no initialization with `new` keyword
-	var ms2 *myStruct
-	ms2 = new(myStruct)
-	fmt.Println(ms2)
-
-	// `*` has lower precendence than `.` so parentheses are necessary
-	(*ms2).foo = 42
-	fmt.Println((*ms2).foo)
-
-	// go compiler will implicity use value of struct, not pointer (shorthand)
-	fmt.Println(ms2.foo)
-
-	// zero value for a pointer is `nil`
-
-	// all assignment operations in go are copy operations
-	// slices and maps both pass values by reference
+	// go promotes variable to shared/heap memory since it is being used outside of function's scope
+	return &result
 }
